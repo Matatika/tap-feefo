@@ -14,42 +14,19 @@ class TapFeefo(Tap):
 
     name = "tap-feefo"
 
-    # TODO: Update this section with the actual config values you expect:
     config_jsonschema = th.PropertiesList(
         th.Property(
-            "auth_token",
+            "merchant_id",
             th.StringType,
             required=True,
-            secret=True,  # Flag config as protected.
-            title="Auth Token",
-            description="The token to authenticate against the API service",
-        ),
-        th.Property(
-            "project_ids",
-            th.ArrayType(th.StringType),
-            required=True,
-            title="Project IDs",
-            description="Project IDs to replicate",
+            title="Merchant ID",
+            description="Feefo merchant identify (e.g. `example-retail-merchant`)",
         ),
         th.Property(
             "start_date",
             th.DateTimeType,
-            description="The earliest record date to sync",
-        ),
-        th.Property(
-            "api_url",
-            th.StringType,
-            title="API URL",
-            default="https://api.mysample.com",
-            description="The url for the API service",
-        ),
-        th.Property(
-            "user_agent",
-            th.StringType,
-            description=(
-                "A custom User-Agent header to send with each request. Default is "
-                "'<tap_name>/<tap_version>'"
-            ),
+            description="Timestamp in ISO 8601 format to get data from (inclusive)",
+            title="Start date",
         ),
     ).to_dict()
 
