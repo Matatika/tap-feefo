@@ -7,7 +7,7 @@ import typing as t
 
 from singer_sdk.authenticators import APIKeyAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
-from singer_sdk.pagination import BaseAPIPaginator  # noqa: TC002
+from singer_sdk.pagination import BasePageNumberPaginator
 from singer_sdk.streams import RESTStream
 from typing_extensions import override
 
@@ -18,9 +18,6 @@ if t.TYPE_CHECKING:
 
 class FeefoStream(RESTStream):
     """Feefo stream class."""
-
-    # Update this value if necessary or override `get_new_paginator`.
-    next_page_token_jsonpath = "$.next_page"  # noqa: S105
 
     url_base = "https://api.feefo.com/api/20"
 
@@ -49,20 +46,9 @@ class FeefoStream(RESTStream):
         # headers["Private-Token"] = self.config.get("auth_token")  # noqa: ERA001
         return {}
 
-    def get_new_paginator(self) -> BaseAPIPaginator:
-        """Create a new pagination helper instance.
-
-        If the source API can make use of the `next_page_token_jsonpath`
-        attribute, or it contains a `X-Next-Page` header in the response
-        then you can remove this method.
-
-        If you need custom pagination that uses page numbers, "next" links, or
-        other approaches, please read the guide: https://sdk.meltano.com/en/v0.25.0/guides/pagination-classes.html.
-
-        Returns:
-            A pagination helper instance.
-        """
-        return super().get_new_paginator()
+    @override
+    def get_new_paginator(self):
+        return BasePageNumberPaginator(1)
 
     @override
     def get_url_params(
@@ -73,6 +59,7 @@ class FeefoStream(RESTStream):
         params = super().get_url_params(context, next_page_token)
         params["merchant_identifier"] = self.config["merchant_id"]
         params["page_size"] = 100
+        params["page"] = next_page_token
 
         return params
 
