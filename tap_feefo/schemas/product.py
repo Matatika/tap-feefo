@@ -40,3 +40,9 @@ ProductObject = th.PropertiesList(
     th.Property("created_at", th.DateTimeType),
     th.Property("helpful_votes", th.IntegerType),
 )
+
+ProductRatingObject = th.PropertiesList(
+    th.Property("rating", th.NumberType),
+    th.Property("sku", th.StringType),
+    th.Property("review_count", th.IntegerType),
+)

@@ -34,6 +34,7 @@ class TapFeefo(Tap):
     def discover_streams(self):
         return [
             streams.ReviewsStream(self),
+            streams.ProductRatingsStream(self),
         ]
 
 
