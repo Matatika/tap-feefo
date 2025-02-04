@@ -4,36 +4,25 @@ from __future__ import annotations
 
 import decimal
 import typing as t
-from importlib import resources
 
 from singer_sdk.authenticators import APIKeyAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.pagination import BaseAPIPaginator  # noqa: TC002
 from singer_sdk.streams import RESTStream
+from typing_extensions import override
 
 if t.TYPE_CHECKING:
     import requests
     from singer_sdk.helpers.types import Context
 
 
-# TODO: Delete this is if not using json files for schema definition
-SCHEMAS_DIR = resources.files(__package__) / "schemas"
-
-
 class FeefoStream(RESTStream):
     """Feefo stream class."""
-
-    # Update this value if necessary or override `parse_response`.
-    records_jsonpath = "$[*]"
 
     # Update this value if necessary or override `get_new_paginator`.
     next_page_token_jsonpath = "$.next_page"  # noqa: S105
 
-    @property
-    def url_base(self) -> str:
-        """Return the API URL root, configurable via tap settings."""
-        # TODO: hardcode a value here, or retrieve it from self.config
-        return "https://api.mysample.com"
+    url_base = "https://api.feefo.com/api/20"
 
     @property
     def authenticator(self) -> APIKeyAuthenticator:
@@ -75,26 +64,16 @@ class FeefoStream(RESTStream):
         """
         return super().get_new_paginator()
 
+    @override
     def get_url_params(
         self,
-        context: Context | None,  # noqa: ARG002
-        next_page_token: t.Any | None,  # noqa: ANN401
-    ) -> dict[str, t.Any]:
-        """Return a dictionary of values to be used in URL parameterization.
+        context: Context | None,
+        next_page_token: t.Any | None,
+    ):
+        params = super().get_url_params(context, next_page_token)
+        params["merchant_identifier"] = self.config["merchant_id"]
+        params["page_size"] = 100
 
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary of URL query parameters.
-        """
-        params: dict = {}
-        if next_page_token:
-            params["page"] = next_page_token
-        if self.replication_key:
-            params["sort"] = "asc"
-            params["order_by"] = self.replication_key
         return params
 
     def prepare_request_payload(

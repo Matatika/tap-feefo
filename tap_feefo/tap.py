@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
+from typing_extensions import override
 
-# TODO: Import your custom stream types here:
 from tap_feefo import streams
 
 
@@ -30,15 +30,10 @@ class TapFeefo(Tap):
         ),
     ).to_dict()
 
-    def discover_streams(self) -> list[streams.FeefoStream]:
-        """Return a list of discovered streams.
-
-        Returns:
-            A list of discovered streams.
-        """
+    @override
+    def discover_streams(self):
         return [
-            streams.GroupsStream(self),
-            streams.UsersStream(self),
+            streams.ReviewsStream(self),
         ]
 
 
