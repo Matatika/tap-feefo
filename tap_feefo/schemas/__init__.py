@@ -11,6 +11,17 @@ RatingProperty = th.Property(
     ),
 )
 
+CustomProperty = th.Property(
+    "custom",
+    th.ArrayType(
+        th.PropertiesList(
+            th.Property("question_id", th.StringType),
+            th.Property("question", th.StringType),
+            th.Property("answer", th.StringType),
+        )
+    ),
+)
+
 SocialProperty = th.Property(
     "social",
     th.PropertiesList(
@@ -38,6 +49,12 @@ MediaProperty = th.Property(
             th.Property("helpful_votes", th.IntegerType),
         )
     ),
+)
+
+ModerationStatusProperty = th.Property(
+    "moderation_status",
+    th.StringType,
+    allowed_values=["pending", "published", "rejected"],
 )
 
 AggregatableScoresProperty = th.Property(

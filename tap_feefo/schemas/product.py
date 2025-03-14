@@ -4,7 +4,9 @@ from singer_sdk import typing as th
 
 from tap_feefo.schemas import (
     AggregatableScoresProperty,
+    CustomProperty,
     MediaProperty,
+    ModerationStatusProperty,
     RatingProperty,
     SocialProperty,
 )
@@ -13,8 +15,10 @@ ProductObject = th.PropertiesList(
     RatingProperty,
     th.Property("id", th.StringType),
     th.Property("review", th.StringType),
+    CustomProperty,
     MediaProperty,
     SocialProperty,
+    ModerationStatusProperty,
     AggregatableScoresProperty,
     th.Property(
         "product",
