@@ -20,7 +20,6 @@ plugins:
     - name: merchant_id
       label: Merchant ID
       description: Feefo merchant ID (e.g. `example-retail-merchant`)
-      sensitive: true
     - name: client_id
       label: Client ID
       description: Feefo OAuth 2.0 client ID
