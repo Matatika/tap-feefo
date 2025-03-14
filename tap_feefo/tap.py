@@ -20,7 +20,7 @@ class TapFeefo(Tap):
             th.StringType,
             required=True,
             title="Merchant ID",
-            description="Feefo merchant identify (e.g. `example-retail-merchant`)",
+            description="Feefo merchant ID (e.g. `example-retail-merchant`)",
         ),
         th.Property(
             "client_id",
