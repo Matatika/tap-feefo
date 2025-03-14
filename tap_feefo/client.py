@@ -6,6 +6,7 @@ import typing as t
 from functools import cached_property
 from http import HTTPStatus
 
+from singer_sdk.exceptions import RetriableAPIError
 from singer_sdk.pagination import BasePageNumberPaginator
 from singer_sdk.streams import RESTStream
 from typing_extensions import override
@@ -62,12 +63,23 @@ class FeefoStream(RESTStream):
         return params
 
     @override
+    def validate_response(self, response: Response):
+        if (
+            response.status_code == HTTPStatus.FORBIDDEN
+            and not self.authenticator.is_token_valid()
+        ):
+            msg = self.response_error_message(response)
+            raise RetriableAPIError(msg, response)
+
+        return super().validate_response(response)
+
+    @override
     def response_error_message(self, response: Response):
         msg = super().response_error_message(response)
 
         if (
             response.status_code == HTTPStatus.FORBIDDEN
-            and "Authorization" in response.request.headers
+            and self.authenticator.is_token_valid()
         ):
             msg += (
                 "\n"
