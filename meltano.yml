@@ -30,7 +30,7 @@ plugins:
     - name: start_date
       kind: date_iso8601
       label: Start date
-      description: Timestamp in ISO 8601 format to get data from (inclusive)
+      description: Timestamp in ISO 8601 format to get data from (inclusive) - defaults to the first day/month of the current year
 
     settings_group_validation:
     - [merchant_id]

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import date, datetime, timezone
+
 from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 from typing_extensions import override
@@ -38,8 +40,12 @@ class TapFeefo(Tap):
         th.Property(
             "start_date",
             th.DateTimeType,
-            description="Timestamp in ISO 8601 format to get data from (inclusive)",
+            description=(
+                "Timestamp in ISO 8601 format to get data from (inclusive) - "
+                "defaults to the first day/month of the current year"
+            ),
             title="Start date",
+            default=date(datetime.now(timezone.utc).year, 1, 1).isoformat(),
         ),
     ).to_dict()
 

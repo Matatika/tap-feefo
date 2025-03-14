@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 from typing_extensions import override
 
 from tap_feefo.client import FeefoStream
@@ -21,7 +23,17 @@ class ReviewsStream(FeefoStream):
     @override
     def get_url_params(self, context, next_page_token):
         params = super().get_url_params(context, next_page_token)
-        params["since_updated_period"] = "all"
+
+        delta = datetime.now(timezone.utc) - self.get_starting_timestamp(context)
+
+        if delta.days < 30:  # noqa: PLR2004
+            since_updated_period = "month"
+        elif delta.days < 365:  # noqa: PLR2004
+            since_updated_period = "year"
+        else:
+            since_updated_period = "all"
+
+        params["since_updated_period"] = since_updated_period
 
         return params
 
