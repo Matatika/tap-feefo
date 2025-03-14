@@ -35,7 +35,5 @@ jobs:
       run: |
         uv sync
     - name: Test with pytest
-      env:
-        TAP_FEEFO_MERCHANT_ID: example-retail-merchant
       run: |
         uv run pytest

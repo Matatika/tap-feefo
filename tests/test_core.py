@@ -7,6 +7,7 @@ from singer_sdk.testing import get_tap_test_class
 from tap_feefo.tap import TapFeefo
 
 SAMPLE_CONFIG = {
+    "merchant_id": "example-retail-merchant",
     "start_date": datetime.min.isoformat(),
 }
 
