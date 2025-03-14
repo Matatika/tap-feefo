@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import typing as t
 from functools import cached_property
 from http import HTTPStatus
 
@@ -12,10 +11,6 @@ from singer_sdk.streams import RESTStream
 from typing_extensions import override
 
 from tap_feefo.auth import FeefoAuthenticator
-
-if t.TYPE_CHECKING:
-    from requests import Response
-    from singer_sdk.helpers.types import Context
 
 
 class FeefoStream(RESTStream):
@@ -50,11 +45,7 @@ class FeefoStream(RESTStream):
         return BasePageNumberPaginator(1)
 
     @override
-    def get_url_params(
-        self,
-        context: Context | None,
-        next_page_token: t.Any | None,
-    ):
+    def get_url_params(self, context, next_page_token):
         params = super().get_url_params(context, next_page_token)
         params["merchant_identifier"] = self.config["merchant_id"]
         params["page_size"] = 100
@@ -63,7 +54,7 @@ class FeefoStream(RESTStream):
         return params
 
     @override
-    def validate_response(self, response: Response):
+    def validate_response(self, response):
         if (
             response.status_code == HTTPStatus.FORBIDDEN
             and not self.authenticator.is_token_valid()
@@ -74,7 +65,7 @@ class FeefoStream(RESTStream):
         return super().validate_response(response)
 
     @override
-    def response_error_message(self, response: Response):
+    def response_error_message(self, response):
         msg = super().response_error_message(response)
 
         if (

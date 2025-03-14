@@ -53,6 +53,7 @@ target-version = "py39"
 
 [tool.ruff.lint]
 ignore = [
+    "ANN001",  # missing-type-function-argument
     "ANN002",  # missing-type-args
     "ANN003",  # missing-type-kwargs
     "ANN201",  # missing-return-type-undocumented-public-function

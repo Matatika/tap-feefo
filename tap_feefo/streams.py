@@ -19,8 +19,8 @@ class ReviewsStream(FeefoStream):
     schema = ReviewObject.to_dict()
 
     @override
-    def get_url_params(self, *args, **kwargs):
-        params = super().get_url_params(*args, **kwargs)
+    def get_url_params(self, context, next_page_token):
+        params = super().get_url_params(context, next_page_token)
         params["since_updated_period"] = "all"
 
         return params
@@ -36,8 +36,8 @@ class ProductRatingsStream(FeefoStream):
     schema = ProductRatingObject.to_dict()
 
     @override
-    def get_url_params(self, *args, **kwargs):
-        params = super().get_url_params(*args, **kwargs)
+    def get_url_params(self, context, next_page_token):
+        params = super().get_url_params(context, next_page_token)
         params["page_size"] = 1000
         params["since_period"] = "all"
         params["review_count"] = True
