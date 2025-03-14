@@ -23,6 +23,19 @@ class TapFeefo(Tap):
             description="Feefo merchant identify (e.g. `example-retail-merchant`)",
         ),
         th.Property(
+            "client_id",
+            th.StringType,
+            title="Client ID",
+            description="Feefo OAuth 2.0 client ID",
+        ),
+        th.Property(
+            "client_secret",
+            th.StringType,
+            title="Client secret",
+            description="Feefo OAuth 2.0 client secret",
+            secret=True,
+        ),
+        th.Property(
             "start_date",
             th.DateTimeType,
             description="Timestamp in ISO 8601 format to get data from (inclusive)",

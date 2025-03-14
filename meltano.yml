@@ -21,6 +21,13 @@ plugins:
       label: Merchant ID
       description: Feefo merchant ID (e.g. `example-retail-merchant`)
       sensitive: true
+    - name: client_id
+      label: Client ID
+      description: Feefo OAuth 2.0 client ID
+    - name: client_secret
+      label: Client secret
+      description: Feefo OAuth 2.0 client secret
+      sensitive: true
     - name: start_date
       kind: date_iso8601
       label: Start date

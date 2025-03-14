@@ -3,13 +3,17 @@
 from __future__ import annotations
 
 import typing as t
+from functools import cached_property
+from http import HTTPStatus
 
-from singer_sdk.authenticators import APIKeyAuthenticator
 from singer_sdk.pagination import BasePageNumberPaginator
 from singer_sdk.streams import RESTStream
 from typing_extensions import override
 
+from tap_feefo.auth import FeefoAuthenticator
+
 if t.TYPE_CHECKING:
+    from requests import Response
     from singer_sdk.helpers.types import Context
 
 
@@ -18,19 +22,27 @@ class FeefoStream(RESTStream):
 
     url_base = "https://api.feefo.com/api/20"
 
-    @property
-    def authenticator(self) -> APIKeyAuthenticator:
-        """Return a new authenticator object.
+    @override
+    @cached_property
+    def authenticator(self):
+        client_id = "client_id" in self.config
+        client_secret = "client_secret" in self.config
 
-        Returns:
-            An authenticator instance.
-        """
-        return APIKeyAuthenticator.create_for_stream(
-            self,
-            key="x-api-key",
-            value=self.config.get("auth_token", ""),
-            location="header",
-        )
+        if client_id and client_secret:
+            return FeefoAuthenticator.create_for_stream(self)
+
+        if client_id:
+            self.logger.warning(
+                "Client ID provided without a client secret, proceeding without "
+                "authentication"
+            )
+        elif client_secret:
+            self.logger.warning(
+                "Client secret provided without a client ID, proceeding without "
+                "authentication"
+            )
+
+        return None
 
     @override
     def get_new_paginator(self):
@@ -48,3 +60,19 @@ class FeefoStream(RESTStream):
         params["page"] = next_page_token
 
         return params
+
+    @override
+    def response_error_message(self, response: Response):
+        msg = super().response_error_message(response)
+
+        if (
+            response.status_code == HTTPStatus.FORBIDDEN
+            and "Authorization" in response.request.headers
+        ):
+            msg += (
+                "\n"
+                "Check the provided client credentials are valid for the merchant "
+                "'{}'".format(self.config["merchant_id"])
+            )
+
+        return msg
