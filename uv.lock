@@ -909,13 +909,13 @@ dev = [
 requires-dist = [
     { name = "fs-s3fs", marker = "extra == 's3'", specifier = "~=1.1.1" },
     { name = "requests", specifier = "~=2.32.3" },
-    { name = "singer-sdk", specifier = "~=0.44.2" },
+    { name = "singer-sdk", specifier = "~=0.44.3" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "pytest", specifier = ">=8" },
-    { name = "singer-sdk", extras = ["testing"], specifier = "~=0.44.2" },
+    { name = "singer-sdk", extras = ["testing"], specifier = "~=0.44.3" },
 ]
 
 [[package]]

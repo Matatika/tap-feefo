@@ -36,7 +36,7 @@ tap-feefo = 'tap_feefo.tap:TapFeefo.cli'
 [dependency-groups]
 dev = [
     "pytest>=8",
-    "singer-sdk[testing]~=0.44.2",
+    "singer-sdk[testing]~=0.44.3",
 ]
 
 [tool.pytest.ini_options]
