@@ -20,7 +20,7 @@ classifiers = [
 license-files = [ "LICENSE" ]
 requires-python = ">=3.9"
 dependencies = [
-    "singer-sdk~=0.44.3",
+    "singer-sdk~=0.45.5",
     "requests~=2.32.3",
 ]
 
@@ -35,8 +35,11 @@ tap-feefo = 'tap_feefo.tap:TapFeefo.cli'
 
 [dependency-groups]
 dev = [
+    { include-group = "test" },
+]
+test = [
     "pytest>=8",
-    "singer-sdk[testing]~=0.44.3",
+    "pytest-github-actions-annotate-failures>=0.3",
 ]
 
 [tool.pytest.ini_options]
