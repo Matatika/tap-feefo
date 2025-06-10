@@ -19,7 +19,7 @@ class FeefoAuthenticator(OAuthAuthenticator, metaclass=SingletonMeta):
         }
 
     @classmethod
-    def create_for_stream(cls, stream) -> FeefoAuthenticator:  # noqa: ANN001
+    def create_for_stream(cls, stream) -> FeefoAuthenticator:
         """Instantiate an authenticator for a specific Singer stream.
 
         Args:
