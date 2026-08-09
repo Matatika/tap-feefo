@@ -21,24 +21,7 @@ class FeefoStream(RESTStream):
     @override
     @cached_property
     def authenticator(self):
-        client_id = "client_id" in self.config
-        client_secret = "client_secret" in self.config
-
-        if client_id and client_secret:
-            return FeefoAuthenticator.create_for_stream(self)
-
-        if client_id:
-            self.logger.warning(
-                "Client ID provided without a client secret, proceeding without "
-                "authentication"
-            )
-        elif client_secret:
-            self.logger.warning(
-                "Client secret provided without a client ID, proceeding without "
-                "authentication"
-            )
-
-        return None
+        return FeefoAuthenticator.create_for_stream(self)
 
     @override
     def get_new_paginator(self):
