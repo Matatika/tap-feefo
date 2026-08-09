@@ -6,7 +6,7 @@ from functools import cached_property
 from http import HTTPStatus
 
 from singer_sdk.exceptions import RetriableAPIError
-from singer_sdk.pagination import BasePageNumberPaginator
+from singer_sdk.pagination import PageNumberPaginator
 from singer_sdk.streams import RESTStream
 from typing_extensions import override
 
@@ -21,28 +21,11 @@ class FeefoStream(RESTStream):
     @override
     @cached_property
     def authenticator(self):
-        client_id = "client_id" in self.config
-        client_secret = "client_secret" in self.config
-
-        if client_id and client_secret:
-            return FeefoAuthenticator.create_for_stream(self)
-
-        if client_id:
-            self.logger.warning(
-                "Client ID provided without a client secret, proceeding without "
-                "authentication"
-            )
-        elif client_secret:
-            self.logger.warning(
-                "Client secret provided without a client ID, proceeding without "
-                "authentication"
-            )
-
-        return None
+        return FeefoAuthenticator.create_for_stream(self)
 
     @override
     def get_new_paginator(self):
-        return BasePageNumberPaginator(1)
+        return PageNumberPaginator(1)
 
     @override
     def get_url_params(self, context, next_page_token):
