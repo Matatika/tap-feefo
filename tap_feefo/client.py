@@ -6,7 +6,7 @@ from functools import cached_property
 from http import HTTPStatus
 
 from singer_sdk.exceptions import RetriableAPIError
-from singer_sdk.pagination import BasePageNumberPaginator
+from singer_sdk.pagination import PageNumberPaginator
 from singer_sdk.streams import RESTStream
 from typing_extensions import override
 
@@ -25,7 +25,7 @@ class FeefoStream(RESTStream):
 
     @override
     def get_new_paginator(self):
-        return BasePageNumberPaginator(1)
+        return PageNumberPaginator(1)
 
     @override
     def get_url_params(self, context, next_page_token):
